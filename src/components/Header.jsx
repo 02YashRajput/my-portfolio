@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { FaCode } from "react-icons/fa";
 
-function Header({ homeRef, skillsRef, contactRef, projectsRef, setHasScrolled }) {
+function Header({ homeRef, skillsRef, contactRef, projectsRef }) {
   const [hasShadow, setHasShadow] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  const sectionRefs = [
+    { section: 'Home', ref: homeRef },
+    { section: 'Projects', ref: projectsRef },
+    { section: 'Skills', ref: skillsRef },
+    { section: 'Contact', ref: contactRef },
+  ];
 
   const scrollToSection = (sectionRef) => {
     if (sectionRef.current) {
       sectionRef.current.scrollIntoView({ behavior: "smooth" });
-      
     }
   };
 
@@ -15,21 +22,51 @@ function Header({ homeRef, skillsRef, contactRef, projectsRef, setHasScrolled })
     const handleScroll = () => {
       if (window.scrollY > 10) {
         setHasShadow(true);
-
       } else {
         setHasShadow(false);
-
       }
     };
 
-    // Attach the scroll event listener
     window.addEventListener("scroll", handleScroll);
 
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, );
+  }, []);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.6, // 60% of the section needs to be in view
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.dataset.section);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sectionRefs.forEach(({ ref, section }) => {
+      if (ref.current) {
+        ref.current.dataset.section = section;
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      sectionRefs.forEach(({ ref }) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div
@@ -40,42 +77,24 @@ function Header({ homeRef, skillsRef, contactRef, projectsRef, setHasScrolled })
       <FaCode />
       <nav>
         <ul className="flex justify-center items-center gap-10">
-          <li
-            className="cursor-pointer relative inline-block group"
-            onClick={() => {
-              scrollToSection(homeRef);
-            }}
-          >
-            Home
-            <span className="absolute bottom-0 left-[2px] right-[2px] h-0.5 bg-black transform -translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200" />
-          </li>
-          <li
-            className="cursor-pointer relative inline-block group"
-            onClick={() => {
-              scrollToSection(projectsRef);
-            }}
-          >
-            Projects
-            <span className="absolute bottom-0 left-[2px] right-[2px] h-0.5 bg-black transform -translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200" />
-          </li>
-          <li
-            className="cursor-pointer relative inline-block group"
-            onClick={() => {
-              scrollToSection(skillsRef);
-            }}
-          >
-            Skills
-            <span className="absolute bottom-0 left-[2px] right-[2px] h-0.5 bg-black transform -translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200" />
-          </li>
-          <li
-            className="cursor-pointer relative inline-block group"
-            onClick={() => {
-              scrollToSection(contactRef);
-            }}
-          >
-            Contact
-            <span className="absolute bottom-0 left-[2px] right-[2px] h-0.5 bg-black transform -translate-y-1 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-200" />
-          </li>
+          {sectionRefs.map(({ section, ref }) => (
+            <li
+              key={section}
+              className={`cursor-pointer relative inline-block group hover:font-semibold ${
+                activeSection === section ? "text-black font-bold" : ""
+              }  transition-all duration-200 ` }
+              onClick={() => scrollToSection(ref)}
+            >
+              {section}
+              <span
+                className={`absolute bottom-0 left-[2px] right-[2px] h-0.5 bg-black transform ${
+                  activeSection === section
+                    ? "translate-y-0 opacity-100"
+                    : "-translate-y-1 opacity-0"
+                } transition-all duration-200`}
+              />
+            </li>
+          ))}
         </ul>
       </nav>
     </div>
