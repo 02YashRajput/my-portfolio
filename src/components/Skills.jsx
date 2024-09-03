@@ -5,14 +5,20 @@ const Skills = ({ skillsRef }) => {
   const backendTechnologies = ["Node.js", "MongoDB", "MySQL"];
   const programmingLanguages = ["Python", "Java", "C++"];
   const tools = ["Git", "GitHub", "Canva"];
+  
+  const machineLearningTechnologies = ["TensorFlow", "PyTorch", "scikit-learn", "Keras", "OpenCV"];
+  const aiConcepts = ["Neural Networks", "Natural Language Processing", "Computer Vision", "Reinforcement Learning", "Deep Learning"];
+  
 
   const skillCategories = [
     { title: "Frontend Technologies", skills: frontendTechnologies },
     { title: "Backend Technologies", skills: backendTechnologies },
     { title: "Programming Languages", skills: programmingLanguages },
     { title: "Tools", skills: tools },
+    { title: "Machine Learning Technologies", skills: machineLearningTechnologies },
+    { title: "AI Concepts", skills: aiConcepts },
   ];
-
+  
   return (
     <div ref={skillsRef} className="flex flex-col items-center justify-center gap-20 px-10 py-36 ">
       <div className="flex flex-col justify-center items-center gap-5">
