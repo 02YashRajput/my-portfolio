@@ -14,7 +14,7 @@ const Hero = ({ homeRef, projectsRef, contactRef }) => {
       <div className="max-w-[600px] flex flex-col gap-5 flex-grow">
         <h1 className="text-5xl font-bold ">Yash Rajput</h1>
         <h3 className="text-2xl lg:text-3xl text-gray-500">
-          Software Devloper
+          Software Developer
         </h3>
         <p className="lg:text-xl">
           A versatile software developer skilled in React, Node.js, Python,
