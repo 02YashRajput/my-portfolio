@@ -1,4 +1,5 @@
 import React from "react";
+import DownloadButton from "./DownloadButton";
 
 const Hero = ({ homeRef, projectsRef, contactRef }) => {
   const scrollToSection = (sectionRef) => {
@@ -21,7 +22,7 @@ const Hero = ({ homeRef, projectsRef, contactRef }) => {
           Java, and C++, with a passion for building dynamic and efficient
           applications.
         </p>
-        <div className="flex gap-10">
+        <div className="flex gap-10 flex-wrap">
           <button
             className="lg:text-lg py-2 px-4 bg-black text-white rounded-lg hover:opacity-70 transition-all duration-150"
             onClick={() => scrollToSection(projectsRef)}
@@ -34,6 +35,7 @@ const Hero = ({ homeRef, projectsRef, contactRef }) => {
           >
             Contact Me
           </button>
+          <DownloadButton/>
         </div>
       </div>
       <div className="max-w-[400px] flex-grow flex flex-col gap-8 p-4 bg-muted rounded-lg">
